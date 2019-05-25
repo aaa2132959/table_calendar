@@ -6,14 +6,17 @@ import 'package:flutter/material.dart';
 /// Main Builder signature for `TableCalendar`. Contains `date` and list of all `events` associated with that `date`.
 /// Note that most of the time, `events` param will be ommited, however it is there if needed.
 /// `events` param can be null.
-typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
+typedef FullBuilder = Widget Function(
+    BuildContext context, DateTime date, List events);
 
 /// Builder signature for a list of event markers. Contains `date` and list of all `events` associated with that `date`.
 /// Both `events` and `holidays` params can be null.
-typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events, List holidays);
+typedef FullListBuilder = List<Widget> Function(
+    BuildContext context, DateTime date, List events, List holidays);
 
 /// Builder signature for a single event marker. Contains `date` and a single `event` associated with that `date`.
-typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
+typedef SingleMarkerBuilder = Widget Function(
+    BuildContext context, DateTime date, dynamic event);
 
 /// Class containing all custom Builders for `TableCalendar`.
 class CalendarBuilders {
@@ -58,6 +61,9 @@ class CalendarBuilders {
   /// Mutually exclusive with `markersBuilder`.
   final SingleMarkerBuilder singleMarkerBuilder;
 
+  /// extend header info , add coustom info
+  final Function headerExtendBuilder;
+
   const CalendarBuilders({
     this.dayBuilder,
     this.selectedDayBuilder,
@@ -69,5 +75,6 @@ class CalendarBuilders {
     this.outsideHolidayDayBuilder,
     this.markersBuilder,
     this.singleMarkerBuilder,
+    this.headerExtendBuilder,
   }) : assert(!(singleMarkerBuilder != null && markersBuilder != null));
 }
