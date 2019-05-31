@@ -64,6 +64,9 @@ class CalendarStyle {
   /// This property defines if those should be visible (eg. with custom style) or hidden.
   final bool outsideDaysVisible;
 
+  ///Specifies whether or not show markers。
+  final bool markersVisible;
+
   /// Determines rendering priority for SelectedDay and Today.
   /// * `true` - SelectedDay will have higher priority than Today
   /// * `false` - Today will have higher priority than SelectedDay
@@ -88,6 +91,7 @@ class CalendarStyle {
     this.markersPositionRight,
     this.markersMaxAmount = 4,
     this.outsideDaysVisible = true,
+    this.markersVisible = true,
     this.renderSelectedFirst = true,
   });
 }

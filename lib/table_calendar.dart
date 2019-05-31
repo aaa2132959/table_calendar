@@ -274,8 +274,11 @@ class _TableCalendarState extends State<TableCalendar>
     /// 日历头信息
     if (widget.headerVisible) {
       children.addAll([
-        const SizedBox(height: 6.0),
-        _buildHeader(),
+        Container(
+          padding: EdgeInsets.only(top: 1.0),
+          color: widget.headerStyle.titleTextStyle.backgroundColor,
+          child: _buildHeader(),
+        ),
       ]);
     }
 
@@ -467,7 +470,7 @@ class _TableCalendarState extends State<TableCalendar>
 
     return Table(
       /// todo 根据需要做出选择，可以在table内加边框
-      //border: TableBorder.all(width: 1.0),
+//      border: TableBorder.all(width: 0.1),
       // Makes this Table fill its parent horizontally
       defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
       children: children,
@@ -504,7 +507,7 @@ class _TableCalendarState extends State<TableCalendar>
               maxHeight: widget.rowHeight ?? constraints.maxWidth,
               minHeight: widget.rowHeight ?? constraints.maxHeight,
             ),
-            //child: _buildCell(date),
+//            child: _buildCell(date),
             /// 添加边框
             child: widget.decoration == null
                 ? _buildCell(date)
@@ -536,7 +539,7 @@ class _TableCalendarState extends State<TableCalendar>
       final events =
           widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount);
 
-      if (events.isNotEmpty) {
+      if (widget.calendarStyle.markersVisible && events.isNotEmpty) {
         if (widget.builders.markersBuilder != null) {
           children.addAll(
             widget.builders.markersBuilder(
