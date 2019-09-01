@@ -135,6 +135,9 @@ class TableCalendar extends StatefulWidget {
   /// table and cell decorated ,can add border,color, and so on
   final Decoration decoration;
 
+  /// Used to show/hide Week Header.
+  final bool weekHeaderVisible;
+
   TableCalendar({
     Key key,
     this.locale,
@@ -166,6 +169,7 @@ class TableCalendar extends StatefulWidget {
     this.headerStyle = const HeaderStyle(),
     this.builders = const CalendarBuilders(),
     this.decoration,
+    this.weekHeaderVisible=true,
   })  : assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         super(key: key);
@@ -457,9 +461,10 @@ class _TableCalendarState extends State<TableCalendar>
 
   Widget _buildTable() {
     final daysInWeek = 7;
-    final children = <TableRow>[
-      _buildDaysOfWeek(),
-    ];
+    final children = <TableRow>[];
+    if(widget.weekHeaderVisible){
+      children.add(_buildDaysOfWeek());
+    }
 
     int x = 0;
     while (x < _calendarLogic.visibleDays.length) {
