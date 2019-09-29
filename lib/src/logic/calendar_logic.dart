@@ -183,6 +183,11 @@ class CalendarLogic {
     _focusedDay = Utils.nextWeek(_focusedDay);
   }
 
+  /// 用于底部扩展控制器设置当前日期
+  void setFocusedDay(DateTime targetDay){
+    _focusedDay=targetDay;
+  }
+
   DateTime _getFirstDay({@required bool includeInvisible}) {
     if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
       return Utils.firstDayOfMonth(_focusedDay);

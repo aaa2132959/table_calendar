@@ -15,6 +15,12 @@ import 'src/widgets/widgets.dart';
 
 export 'src/customization/customization.dart';
 
+/// 从控件外部设置选中日期.
+typedef void SetFocusedDay(DateTime targetDay,);
+
+/// 月份改变回调. count 改变数量，可能值为 1、-1
+typedef void OnMonthChanged(int count,);
+
 /// Callback exposing currently selected day.
 typedef void OnDaySelected(DateTime day, List events);
 
@@ -138,6 +144,13 @@ class TableCalendar extends StatefulWidget {
   /// Used to show/hide Week Header.
   final bool weekHeaderVisible;
 
+  /// 从控件外部设置选中日期
+  final SetFocusedDay setFocusedDay;
+
+  ///
+  final OnMonthChanged onMonthChanged;
+
+
   TableCalendar({
     Key key,
     this.locale,
@@ -170,17 +183,19 @@ class TableCalendar extends StatefulWidget {
     this.builders = const CalendarBuilders(),
     this.decoration,
     this.weekHeaderVisible=true,
+    this.setFocusedDay,
+    this.onMonthChanged,
   })  : assert(availableCalendarFormats.keys.contains(initialCalendarFormat)),
         assert(availableCalendarFormats.length <= CalendarFormat.values.length),
         super(key: key);
 
   @override
-  _TableCalendarState createState() {
-    return new _TableCalendarState();
+  TableCalendarState createState() {
+    return new TableCalendarState();
   }
 }
 
-class _TableCalendarState extends State<TableCalendar>
+class TableCalendarState extends State<TableCalendar>
     with SingleTickerProviderStateMixin {
   CalendarLogic _calendarLogic;
 
@@ -234,12 +249,15 @@ class _TableCalendarState extends State<TableCalendar>
   void _selectPrevious() {
     setState(() {
       _calendarLogic.selectPrevious();
+      widget.onMonthChanged(-1);
     });
   }
 
+  /// 右顶部按钮和左右滑动调用
   void _selectNext() {
     setState(() {
       _calendarLogic.selectNext();
+      widget.onMonthChanged(1);
     });
   }
 
@@ -265,10 +283,27 @@ class _TableCalendarState extends State<TableCalendar>
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
       _selectPrevious();
+//      widget.onMonthChanged(-1);
     } else {
       // Swipe left
       _selectNext();
+//      widget.onMonthChanged(1);
     }
+  }
+
+  /// 用于底部扩展控制器设置当前日期
+  void setFocusedDay(DateTime targetDay){
+    setState(() {
+      /// todo 月份相同，不需要做操作。
+      _calendarLogic.setSelectedDay(targetDay);
+
+      if (widget.onDaySelected != null) {
+        final key = widget.events.keys
+            .firstWhere((it) => Utils.isSameDay(it, targetDay), orElse: () => null);
+        widget.onDaySelected(targetDay, widget.events[key] ?? []);
+      }
+//      _calendarLogic.setFocusedDay(targetDay);
+    });
   }
 
   @override
@@ -449,6 +484,7 @@ class _TableCalendarState extends State<TableCalendar>
         );
       },
       layoutBuilder: (currentChild, _) => currentChild,
+      /// todo 轮播组件
       child: Dismissible(
         key: ValueKey(_calendarLogic.pageId),
         resizeDuration: null,
