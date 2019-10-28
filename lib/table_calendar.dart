@@ -249,7 +249,7 @@ class TableCalendarState extends State<TableCalendar>
   void _selectPrevious() {
     setState(() {
       _calendarLogic.selectPrevious();
-      widget.onMonthChanged(-1);
+      if(widget.onMonthChanged!=null) widget.onMonthChanged(-1);
     });
   }
 
@@ -257,7 +257,7 @@ class TableCalendarState extends State<TableCalendar>
   void _selectNext() {
     setState(() {
       _calendarLogic.selectNext();
-      widget.onMonthChanged(1);
+      if(widget.onMonthChanged!=null) widget.onMonthChanged(1);
     });
   }
 
