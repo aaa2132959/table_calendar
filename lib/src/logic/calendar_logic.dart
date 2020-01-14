@@ -42,7 +42,7 @@ class CalendarLogic {
     bool includeInvisibleDays = false,
   })  : _pageId = 0,
         _dx = 0 {
-    final now = DateTime.now();
+    final now = DateTime.now().toUtc().add(Duration(hours: 8));
     _focusedDay = initialDay ?? DateTime(now.year, now.month, now.day);
     _selectedDay = _focusedDay;
     _calendarFormat = ValueNotifier(initialFormat);
@@ -293,7 +293,7 @@ class CalendarLogic {
   }
 
   bool isToday(DateTime day) {
-    return Utils.isSameDay(day, DateTime.now());
+    return Utils.isSameDay(day, DateTime.now().toUtc().add(Duration(hours: 8)));
   }
 
   bool isWeekend(DateTime day) {
